@@ -51,24 +51,6 @@ export default function Sidebar({ page, onNavigate, isOpen, onClose }) {
             <span>📁</span> DATA EXCEL
           </a>
         </nav>
-
-        {/* Bottom info */}
-        <div style={{ marginTop: "auto" }}>
-          <div className="period-bar">
-            <div style={{ fontSize: 12, fontWeight: 700, color: "white", marginBottom: 4 }}>
-              Periode Aktif
-            </div>
-            <div style={{ fontSize: 12, color: "rgba(255,255,255,0.6)" }}>
-              Januari — Desember 2025
-            </div>
-            <div style={{ marginTop: 8, height: 6, borderRadius: 20, background: "rgba(255,255,255,0.15)" }}>
-              <div style={{ height: 6, borderRadius: 20, background: "#F37021", width: "42%" }} />
-            </div>
-            <div style={{ fontSize: 11, marginTop: 4, color: "rgba(255,255,255,0.5)" }}>
-              42% dari target tahunan
-            </div>
-          </div>
-        </div>
       </aside>
     </>
   );

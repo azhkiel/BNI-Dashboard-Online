@@ -105,7 +105,6 @@ const IconArrowUp = ({ color = "#22c55e" }) => (
     <polyline points="5 12 12 5 19 12"/>
   </svg>
 );
-
 // ── KPI Card ──
 function KpiCard({ label, value, IconComponent, iconColor, cardClass, iconBg, pct, delay, loading }) {
   return (
@@ -124,15 +123,9 @@ function KpiCard({ label, value, IconComponent, iconColor, cardClass, iconBg, pc
           <IconComponent color={iconColor} />
         </div>
       </div>
-      <div style={{ marginTop: 16, display: "flex", gap: 6, alignItems: "center" }}>
-        <IconArrowUp color="#22c55e" />
-        <span style={{ fontSize: 12, fontWeight: 700, color: "#22c55e" }}>{pct}</span>
-        <span style={{ fontSize: 12, color: "#94a3b8" }}>vs bulan lalu</span>
-      </div>
     </div>
   );
 }
-
 // ── Chart Card ──
 function ChartCard({ title, subtitle, badge, children }) {
   return (
