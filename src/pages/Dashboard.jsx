@@ -61,81 +61,58 @@ const CHART_OPTIONS = {
   }),
 };
 
-// ── SVG Icons ──
-const IconMoney = ({ color }) => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10"/>
-    <path d="M12 6v2m0 8v2M9.5 9.5A2.5 2.5 0 0 1 12 8a2.5 2.5 0 0 1 0 5 2.5 2.5 0 0 0 0 5 2.5 2.5 0 0 0 2.5-1.5"/>
-  </svg>
-);
-const IconTrend = ({ color }) => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
-    <polyline points="17 6 23 6 23 12"/>
-  </svg>
-);
-const IconClipboard = ({ color }) => (
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
-    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
-    <line x1="9" y1="12" x2="15" y2="12"/>
-    <line x1="9" y1="16" x2="13" y2="16"/>
-  </svg>
-);
-const IconBank = ({ color = "white" }) => (
-  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="3" y1="22" x2="21" y2="22"/>
-    <line x1="6" y1="18" x2="6" y2="11"/>
-    <line x1="10" y1="18" x2="10" y2="11"/>
-    <line x1="14" y1="18" x2="14" y2="11"/>
-    <line x1="18" y1="18" x2="18" y2="11"/>
-    <polygon points="12 2 20 7 4 7"/>
-  </svg>
-);
-const IconDownload = ({ color = "white" }) => (
-  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-    <polyline points="7 10 12 15 17 10"/>
-    <line x1="12" y1="15" x2="12" y2="3"/>
-  </svg>
-);
-const IconArrowUp = ({ color = "#22c55e" }) => (
-  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-    <line x1="12" y1="19" x2="12" y2="5"/>
-    <polyline points="5 12 12 5 19 12"/>
-  </svg>
-);
+// ── Lucide Icons ──
+import {
+  DollarSign,
+  TrendingUp,
+  ClipboardList,
+  Landmark,
+  Download,
+  ArrowUp,
+  Loader2,
+} from "lucide-react";
+
 // ── KPI Card ──
-function KpiCard({ label, value, IconComponent, iconColor, cardClass, iconBg, pct, delay, loading }) {
+function KpiCard({ label, value, icon: Icon, iconColor, accentColor, iconBg, loading }) {
   return (
-    <div className={`kpi-card ${cardClass} fade-up ${delay}`}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-        <div style={{ flex: 1, minWidth: 0, paddingRight: 12 }}>
-          <p style={{ fontSize: 11, fontWeight: 600, color: "#94a3b8", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 8 }}>
+    <div className="relative bg-white rounded-[18px] shadow-[0_2px_20px_rgba(0,63,135,0.07)] border border-[rgba(0,63,135,0.07)] overflow-hidden px-6 py-5 transition-all duration-200 hover:-translate-y-1 hover:shadow-[0_8px_32px_rgba(0,63,135,0.13)]">
+      {/* Top accent bar */}
+      <div className="absolute top-0 left-0 right-0 h-1 rounded-t-[18px]" style={{ background: accentColor }} />
+
+      <div className="flex justify-between items-start">
+        <div className="flex-1 min-w-0 pr-3">
+          <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-2">
             {label}
           </p>
-          {loading
-            ? <div className="shimmer" />
-            : <div style={{ fontSize: 24, fontWeight: 800, color: "#002960" }}>{value}</div>
-          }
+          {loading ? (
+            <div className="h-7 w-32 rounded-lg bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100 bg-[length:400px_100%] animate-[shimmer_1.4s_infinite]" />
+          ) : (
+            <div className="text-2xl font-extrabold text-[#002960]">{value}</div>
+          )}
         </div>
-        <div style={{ width: 48, height: 48, borderRadius: 14, display: "flex", alignItems: "center", justifyContent: "center", background: iconBg, flexShrink: 0 }}>
-          <IconComponent color={iconColor} />
+        <div
+          className="w-12 h-12 rounded-[14px] flex items-center justify-center shrink-0"
+          style={{ background: iconBg }}
+        >
+          <Icon size={22} style={{ color: iconColor }} />
         </div>
       </div>
     </div>
   );
 }
+
 // ── Chart Card ──
 function ChartCard({ title, subtitle, badge, children }) {
   return (
-    <div className="chart-card">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 20 }}>
+    <div className="bg-white rounded-[18px] shadow-[0_2px_20px_rgba(0,63,135,0.07)] border border-[rgba(0,63,135,0.06)] p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_32px_rgba(0,63,135,0.11)] min-w-0">
+      <div className="flex justify-between items-start mb-5">
         <div>
-          <div style={{ fontWeight: 700, color: "#002960", fontSize: 15 }}>{title}</div>
-          <div style={{ fontSize: 12, color: "#94a3b8", marginTop: 2 }}>{subtitle}</div>
+          <div className="font-bold text-[#002960] text-[15px]">{title}</div>
+          <div className="text-xs text-slate-400 mt-0.5">{subtitle}</div>
         </div>
-        <span className="badge">{badge}</span>
+        <span className="inline-flex items-center gap-1 bg-[#EEF4FF] text-[#003F87] text-[11px] font-bold px-3 py-1 rounded-full whitespace-nowrap shrink-0">
+          {badge}
+        </span>
       </div>
       {children}
     </div>
@@ -148,7 +125,6 @@ export default function Dashboard({ data, loading }) {
   const productRef   = useRef(null);
   const basRef       = useRef(null);
   const lsrRef       = useRef(null);
-  const dashboardRef = useRef(null);
   const feeRef       = useRef(null);
   const [exporting, setExporting] = useState(false);
 
@@ -202,15 +178,14 @@ export default function Dashboard({ data, loading }) {
     day: "numeric", month: "long", year: "numeric",
   });
 
-  // ── NEW: export PDF menggunakan jsPDF programatik (bukan screenshot) ──
   async function handleExportPDF() {
     if (!chartData || loading) return;
     setExporting(true);
     try {
       await exportToPDF(
-        null,                          // element tidak dipakai lagi
+        null,
         "Dashboard_Produksi_BNI_Life",
-        chartData,                     // { monthly, product, fee, bas, lsr }
+        chartData,
         { totalPremium, totalFee, totalPolicy },
         dateStr,
         BNI_COLORS,
@@ -222,109 +197,137 @@ export default function Dashboard({ data, loading }) {
   }
 
   return (
-    <div style={{ padding: "24px 32px" }} className="page-main">
+    <div className="px-8 py-6 max-w-full overflow-x-hidden">
 
-      {/* Action buttons */}
-      <div style={{ display: "flex", gap: 10, marginBottom: 20, flexWrap: "wrap" }}>
+      {/* ── Action Buttons ── */}
+      <div className="flex gap-2.5 mb-5 flex-wrap">
         <button
-          className="btn-emerald"
           onClick={handleExportPDF}
           disabled={exporting || loading}
-          style={{ opacity: (exporting || loading) ? 0.7 : 1, cursor: (exporting || loading) ? "not-allowed" : "pointer" }}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white
+            bg-gradient-to-br from-emerald-500 to-emerald-700
+            shadow-[0_4px_14px_rgba(5,150,105,0.25)]
+            transition-all duration-200
+            hover:not-disabled:-translate-y-0.5 hover:not-disabled:shadow-[0_6px_20px_rgba(5,150,105,0.35)]
+            disabled:opacity-65 disabled:cursor-not-allowed"
         >
           {exporting ? (
-            <><span style={{ display: "inline-block", animation: "spin 1s linear infinite" }}>⏳</span> Membuat PDF...</>
+            <><Loader2 size={14} className="animate-spin" /> Membuat PDF...</>
           ) : (
-            <><IconDownload /> Download PDF</>
+            <><Download size={14} /> Download PDF</>
           )}
         </button>
+
         <button
-          className="btn-emerald"
           onClick={() => exportToCSV(data)}
           disabled={loading}
-          style={{ background: "linear-gradient(135deg, #0369a1 0%, #075985 100%)", opacity: loading ? 0.7 : 1 }}
+          className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white
+            bg-gradient-to-br from-sky-600 to-sky-800
+            shadow-[0_4px_14px_rgba(3,105,161,0.25)]
+            transition-all duration-200
+            hover:not-disabled:-translate-y-0.5 hover:not-disabled:shadow-[0_6px_20px_rgba(3,105,161,0.35)]
+            disabled:opacity-65 disabled:cursor-not-allowed"
         >
-          <IconDownload /> Download CSV
+          <Download size={14} /> Download CSV
         </button>
       </div>
 
-      {/* Dashboard UI (tidak dipakai untuk PDF lagi) */}
-      <div ref={dashboardRef} style={{ background: "#F0F4FA", padding: 4 }}>
+      {/* ── Dashboard Content ── */}
+      <div className="bg-[#F0F4FA] p-1 rounded-2xl">
 
-        {/* Header */}
-        <div style={{
-          background: "linear-gradient(135deg, #002960 0%, #003F87 100%)",
-          borderRadius: 16, padding: "20px 24px", marginBottom: 20,
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-        }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-            <div style={{
-              width: 48, height: 48, borderRadius: 12,
-              background: "rgba(255,255,255,0.15)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
-              <IconBank />
+        {/* ── Header ── */}
+        <div
+          className="rounded-2xl px-6 py-5 mb-5 flex items-center justify-between relative overflow-hidden"
+          style={{ background: "linear-gradient(135deg, #002960 0%, #003F87 100%)" }}
+        >
+          {/* Decorative circles */}
+          <div className="absolute -right-10 -top-10 w-44 h-44 rounded-full bg-white/[0.04]" />
+          <div className="absolute right-16 -bottom-14 w-36 h-36 rounded-full bg-white/[0.03]" />
+
+          <div className="flex items-center gap-3.5 relative z-10">
+            <div className="w-12 h-12 rounded-xl bg-white/15 border border-white/15 flex items-center justify-center shrink-0">
+              <Landmark size={26} color="white" strokeWidth={1.8} />
             </div>
             <div>
-              <div style={{ color: "white", fontWeight: 800, fontSize: 20 }}>BNI Life Insurance</div>
-              <div style={{ color: "rgba(255,255,255,0.65)", fontSize: 13, marginTop: 2 }}>
+              <div className="text-white font-extrabold text-xl">BNI Life Insurance</div>
+              <div className="text-white/65 text-[13px] mt-0.5 font-normal">
                 Laporan Dashboard Produksi 2025
               </div>
             </div>
           </div>
-          <div style={{ textAlign: "right" }}>
-            <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.08em" }}>
-              Dicetak pada
-            </div>
-            <div style={{ color: "white", fontWeight: 700, fontSize: 14, marginTop: 2 }}>{dateStr}</div>
+
+          <div className="text-right relative z-10">
+            <div className="text-white/50 text-[11px] uppercase tracking-widest font-semibold">Dicetak pada</div>
+            <div className="text-white font-bold text-sm mt-0.5">{dateStr}</div>
           </div>
         </div>
 
-        {/* KPI Cards */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20, marginBottom: 20 }}>
-          <KpiCard label="Total Premium"   value={formatIDR(totalPremium)} IconComponent={IconMoney}     iconColor="#F37021" iconBg="rgba(243,112,33,0.1)"  cardClass="kpi-orange" pct="12.4%" delay="d1" loading={loading} />
-          <KpiCard label="Total Fee Based" value={formatIDR(totalFee)}     IconComponent={IconTrend}     iconColor="#003F87" iconBg="rgba(0,63,135,0.1)"    cardClass="kpi-navy"   pct="8.1%"  delay="d2" loading={loading} />
-          <KpiCard label="Jumlah Polis"    value={totalPolicy}              IconComponent={IconClipboard} iconColor="#00A99D" iconBg="rgba(0,169,157,0.1)"   cardClass="kpi-teal"   pct="5.7%"  delay="d3" loading={loading} />
+        {/* ── KPI Cards ── */}
+        <div className="grid grid-cols-3 gap-5 mb-5">
+          <KpiCard
+            label="Total Premium"
+            value={formatIDR(totalPremium)}
+            icon={DollarSign}
+            iconColor="#F37021"
+            iconBg="rgba(243,112,33,0.1)"
+            accentColor="#F37021"
+            loading={loading}
+          />
+          <KpiCard
+            label="Total Fee Based"
+            value={formatIDR(totalFee)}
+            icon={TrendingUp}
+            iconColor="#003F87"
+            iconBg="rgba(0,63,135,0.1)"
+            accentColor="#003F87"
+            loading={loading}
+          />
+          <KpiCard
+            label="Jumlah Polis"
+            value={totalPolicy}
+            icon={ClipboardList}
+            iconColor="#00A99D"
+            iconBg="rgba(0,169,157,0.1)"
+            accentColor="#00A99D"
+            loading={loading}
+          />
         </div>
 
-        {/* Charts Row 1 */}
-        <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 20, marginBottom: 20 }}>
+        {/* ── Charts Row 1: Monthly + Product ── */}
+        <div className="grid grid-cols-[2fr_1fr] gap-5 mb-5">
           <ChartCard title="Premium per Bulan" subtitle="Tren premi bulanan tahun 2025" badge="2025">
-            <canvas ref={monthlyRef} height="140" />
+            <canvas ref={monthlyRef} height={140} />
           </ChartCard>
           <ChartCard title="Komposisi Produk" subtitle="Distribusi per jenis produk" badge="Produk">
-            <div style={{ maxWidth: 260, margin: "0 auto" }}>
+            <div className="max-w-[260px] mx-auto">
               <canvas ref={productRef} />
             </div>
           </ChartCard>
         </div>
 
-        {/* Fee Based Chart */}
-        <div style={{ marginBottom: 20 }}>
+        {/* ── Fee Based Chart ── */}
+        <div className="mb-5">
           <ChartCard title="Fee Based per Bulan" subtitle="Tren fee based bulanan tahun 2025" badge="Fee">
-            <canvas ref={feeRef} height="100" />
+            <canvas ref={feeRef} height={100} />
           </ChartCard>
         </div>
 
-        {/* Charts Row 2 */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20, marginBottom: 8 }}>
+        {/* ── Charts Row 2: BAS + LSR ── */}
+        <div className="grid grid-cols-2 gap-5 mb-2">
           <ChartCard title="Top 5 BAS" subtitle="BAS dengan premi tertinggi" badge="Ranking">
-            <canvas ref={basRef} height="180" />
+            <canvas ref={basRef} height={180} />
           </ChartCard>
           <ChartCard title="Top 5 Kontribusi LG" subtitle="LSR dengan premi tertinggi" badge="Ranking">
-            <canvas ref={lsrRef} height="180" />
+            <canvas ref={lsrRef} height={180} />
           </ChartCard>
         </div>
 
       </div>
 
-      <div style={{ textAlign: "center", fontSize: 12, color: "#94a3b8", paddingTop: 20, paddingBottom: 8 }}>
+      {/* ── Footer ── */}
+      <p className="text-center text-xs text-slate-400 pt-5 pb-2">
         © 2025 BNI Life Insurance — Dashboard Produksi Internal
-      </div>
-
-      <style>{`
-        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-      `}</style>
+      </p>
     </div>
   );
 }

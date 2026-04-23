@@ -4,6 +4,10 @@ export async function getAllData() {
   const res = await fetch(BASE_URL + "?action=read");
   return res.json();
 }
+export async function getAllDataSaw() {
+  const res = await fetch(BASE_URL + "?action=read  ");
+  return res.json();
+}
 
 export async function createData(payload) {
   return fetch(BASE_URL + "?action=create", {

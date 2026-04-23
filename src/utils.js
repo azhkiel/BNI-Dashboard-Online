@@ -97,11 +97,21 @@ function rgb(h) {
   const s = h.replace("#", "");
   return [parseInt(s.slice(0,2),16), parseInt(s.slice(2,4),16), parseInt(s.slice(4,6),16)];
 }
-function F(pdf, c) { const [r,g,b] = rgb(c); pdf.setFillColor(r,g,b); }
-function S(pdf, c) { const [r,g,b] = rgb(c); pdf.setDrawColor(r,g,b); }
-function T(pdf, c) { const [r,g,b] = rgb(c); pdf.setTextColor(r,g,b); }
-function A(pdf, a) { pdf.setGState(pdf.GState({ opacity: a })); }
-function RR(pdf, x, y, w, h, r, m="F") { pdf.roundedRect(x, y, w, h, r, r, m); }
+function F(pdf, c) { 
+  const [r,g,b] = rgb(c); pdf.setFillColor(r,g,b); 
+}
+function S(pdf, c) { 
+  const [r,g,b] = rgb(c); pdf.setDrawColor(r,g,b); 
+}
+function T(pdf, c) { 
+  const [r,g,b] = rgb(c); pdf.setTextColor(r,g,b); 
+}
+function A(pdf, a) { 
+  pdf.setGState(pdf.GState({ opacity: a })); 
+}
+function RR(pdf, x, y, w, h, r, m="F") { 
+  pdf.roundedRect(x, y, w, h, r, r, m); 
+}
 
 // ─────────────────────────────────────────────────────────────
 //  BACKGROUND — subtle gradient feel via layered shapes

@@ -5,6 +5,7 @@ import Topbar from "./components/Topbar";
 import BottomNav from "./components/BottomNav";
 import Dashboard from "./pages/Dashboard";
 import Crud from "./pages/Crud";
+import SAWRanking from "./pages/SAWRanking";
 import "./global.css";
 
 export default function App() {
@@ -28,7 +29,6 @@ export default function App() {
 
   useEffect(() => { loadData(); }, [loadData]);
 
-  // Close sidebar when clicking outside on mobile
   const handleNavigate = (newPage) => {
     setPage(newPage);
     setSidebar(false);
@@ -36,14 +36,13 @@ export default function App() {
 
   return (
     /*
-      .page-bg uses flex-direction: row.
-      Sidebar is position:fixed (doesn't take up flow space).
-      .main-wrapper has margin-left: var(--sidebar-w) on desktop
-      to push content past the fixed sidebar.
-      On mobile (≤1023px) margin-left resets to 0 and
-      sidebar slides in as an overlay.
+      Root: flex row, full viewport height.
+      Sidebar is position:fixed (out of flow).
+      lg:ml-64 pushes main content past the 256px fixed sidebar on desktop.
+      On mobile (< lg) sidebar slides off-canvas, margin resets to 0.
     */
-    <div className="page-bg">
+    <div className="flex min-h-screen bg-[#F0F4FA] overflow-x-hidden">
+
       <Sidebar
         page={page}
         onNavigate={handleNavigate}
@@ -51,25 +50,25 @@ export default function App() {
         onClose={() => setSidebar(false)}
       />
 
-      {/* Everything to the right of the sidebar */}
-      <div className="main-wrapper">
+      {/* Main column — pushed right of sidebar on desktop */}
+      <div className="flex flex-col flex-1 min-w-0 min-h-screen lg:ml-64">
+
         <Topbar
           page={page}
           onNavigate={handleNavigate}
           onOpenSidebar={() => setSidebar(true)}
         />
 
-        {/* Page content */}
-        <main style={{ flex: "1 1 auto", minWidth: 0, overflowX: "hidden" }}>
-          {page === "dashboard" ? (
-            <Dashboard data={data} loading={loading} onNavigate={handleNavigate} />
-          ) : (
-            <Crud data={data} loading={loading} onRefresh={loadData} />
-          )}
+        {/* Page content — extra bottom padding on mobile for BottomNav */}
+        <main className="flex-1 min-w-0 overflow-x-hidden pb-24 lg:pb-0">
+          {page === "dashboard"   && <Dashboard  data={data} loading={loading} onNavigate={handleNavigate} />}
+          {page === "sawrangking" && <SAWRanking />}
+          {page === "crud"        && <Crud data={data} loading={loading} onRefresh={loadData} />}
         </main>
+
       </div>
 
-      {/* Mobile bottom navigation */}
+      {/* Mobile bottom nav */}
       <BottomNav page={page} onNavigate={handleNavigate} />
     </div>
   );
