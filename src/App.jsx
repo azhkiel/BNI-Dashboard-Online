@@ -1,3 +1,4 @@
+// App.jsx
 import { useState, useEffect, useCallback } from "react";
 import { getAllData } from "./api";
 import Sidebar from "./components/Sidebar";
@@ -13,6 +14,18 @@ export default function App() {
   const [data, setData]           = useState(null);
   const [loading, setLoading]     = useState(true);
   const [sidebarOpen, setSidebar] = useState(false);
+
+  // ✅ Satu-satunya sumber collapsed state
+  const [collapsed, setCollapsed] = useState(() => {
+    try { return localStorage.getItem("sidebar-collapsed") === "true"; }
+    catch { return false; }
+  });
+
+  // Simpan ke localStorage setiap kali berubah
+  useEffect(() => {
+    try { localStorage.setItem("sidebar-collapsed", String(collapsed)); }
+    catch {}
+  }, [collapsed]);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -35,12 +48,6 @@ export default function App() {
   };
 
   return (
-    /*
-      Root: flex row, full viewport height.
-      Sidebar is position:fixed (out of flow).
-      lg:ml-64 pushes main content past the 256px fixed sidebar on desktop.
-      On mobile (< lg) sidebar slides off-canvas, margin resets to 0.
-    */
     <div className="flex min-h-screen bg-[#F0F4FA] overflow-x-hidden">
 
       <Sidebar
@@ -48,10 +55,15 @@ export default function App() {
         onNavigate={handleNavigate}
         isOpen={sidebarOpen}
         onClose={() => setSidebar(false)}
+        collapsed={collapsed}
+        onCollapse={setCollapsed}
       />
 
-      {/* Main column — pushed right of sidebar on desktop */}
-      <div className="flex flex-col flex-1 min-w-0 min-h-screen lg:ml-64">
+      <div className={[
+        "flex flex-col flex-1 min-w-0 min-h-screen",
+        "transition-[margin] duration-[280ms] ease-[cubic-bezier(0.4,0,0.2,1)]",
+        collapsed ? "lg:ml-16" : "lg:ml-64",
+      ].join(" ")}>
 
         <Topbar
           page={page}
@@ -59,7 +71,6 @@ export default function App() {
           onOpenSidebar={() => setSidebar(true)}
         />
 
-        {/* Page content — extra bottom padding on mobile for BottomNav */}
         <main className="flex-1 min-w-0 overflow-x-hidden pb-24 lg:pb-0">
           {page === "dashboard"   && <Dashboard  data={data} loading={loading} onNavigate={handleNavigate} />}
           {page === "sawrangking" && <SAWRanking />}
@@ -68,7 +79,6 @@ export default function App() {
 
       </div>
 
-      {/* Mobile bottom nav */}
       <BottomNav page={page} onNavigate={handleNavigate} />
     </div>
   );
