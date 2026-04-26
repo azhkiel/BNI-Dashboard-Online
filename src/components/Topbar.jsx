@@ -2,8 +2,9 @@ import { CalendarDays, Menu, Plus, ArrowLeft, LayoutDashboard, FilePen, Star } f
 
 const PAGE_META = {
   dashboard:   { title: "Dashboard Produksi",    sub: "Data real-time per hari ini" },
-  sawrangking: { title: "SAW Ranking",            sub: "Peringkat kinerja BAS berdasarkan SAW" },
-  crud:        { title: "Input & Kelola Data",    sub: "Tambah, edit, atau hapus data produksi" },
+  sawrangking: { title: "SAW Ranking",           sub: "Peringkat kinerja BAS berdasarkan SAW" },
+  tellerdashboard: { title: "Data Teller",       sub: "Data Teller real-time per hari ini" },
+  crud:        { title: "Input & Kelola Data",   sub: "Tambah, edit, atau hapus data produksi" },
 };
 
 export default function Topbar({ page, onNavigate, onOpenSidebar }) {
@@ -46,7 +47,7 @@ export default function Topbar({ page, onNavigate, onOpenSidebar }) {
         </div>
 
         {/* Action button */}
-        {page === "dashboard" || page === "sawrangking" ? (
+        {page === "dashboard" ? (
           <button
             onClick={() => onNavigate("crud")}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white

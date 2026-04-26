@@ -1,12 +1,14 @@
 // components/Sidebar.jsx
 import {
-  LayoutDashboard, Star, FilePen, FileSpreadsheet, X, ChevronLeft,
+  LayoutDashboard, Star, FilePen, BookUser,FileSpreadsheet, X, ChevronLeft, BookDashed
 } from "lucide-react";
 
 const NAV_ITEMS = [
-  { id: "dashboard",   label: "Dashboard",        icon: LayoutDashboard },
-  { id: "sawrangking", label: "SAW Ranking",       icon: Star },
-  { id: "crud",        label: "Input / Edit Data", icon: FilePen },
+  { id: "dashboard",        label: "Dashboard",         icon: LayoutDashboard },
+  { id: "sawrangking",      label: "SAW Ranking",       icon: Star },
+  { id: "tellerdashboard",  label: "Teller Dashboard",  icon: BookDashed },
+  { id: "pasmar",           label: "Pasmar Dashboard",  icon: BookUser },
+  { id: "crud",             label: "Input / Edit Data", icon: FilePen },
 ];
 
 function NavItem({ item, active, collapsed, onClick }) {

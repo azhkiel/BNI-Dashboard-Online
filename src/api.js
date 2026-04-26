@@ -4,8 +4,19 @@ export async function getAllData() {
   const res = await fetch(BASE_URL + "?action=read");
   return res.json();
 }
+
 export async function getAllDataSaw() {
-  const res = await fetch(BASE_URL + "?action=read  ");
+  const res = await fetch(BASE_URL + "?action=read");
+  return res.json();
+}
+
+export async function getAllDataTeller() {
+  const res = await fetch(BASE_URL + "?action=read_teller");
+  return res.json();
+}
+
+export async function getAllDataPasmar() {
+  const res = await fetch(BASE_URL + "?action=read_pasmar");
   return res.json();
 }
 

@@ -1,12 +1,14 @@
 // App.jsx
 import { useState, useEffect, useCallback } from "react";
-import { getAllData } from "./api";
+import { getAllData, getAllDataTeller, getAllDataPasmar } from "./api";
 import Sidebar from "./components/Sidebar";
 import Topbar from "./components/Topbar";
 import BottomNav from "./components/BottomNav";
 import Dashboard from "./pages/Dashboard";
 import Crud from "./pages/Crud";
 import SAWRanking from "./pages/SAWRanking";
+import TellerDashboard from "./pages/TellerDashboard";
+import PasmarDashboard from "./pages/PasmarDashboard"
 import "./global.css";
 
 export default function App() {
@@ -14,18 +16,28 @@ export default function App() {
   const [data, setData]           = useState(null);
   const [loading, setLoading]     = useState(true);
   const [sidebarOpen, setSidebar] = useState(false);
-
+  const [dataTeller, setDataTeller] = useState(null);
+  const [loadingTeller, setLoadingTeller] = useState(true);
+  const [dataPasmar, setDataPasmar] = useState(null);
   // ✅ Satu-satunya sumber collapsed state
   const [collapsed, setCollapsed] = useState(() => {
     try { return localStorage.getItem("sidebar-collapsed") === "true"; }
     catch { return false; }
   });
-
+  
   // Simpan ke localStorage setiap kali berubah
   useEffect(() => {
     try { localStorage.setItem("sidebar-collapsed", String(collapsed)); }
     catch {}
   }, [collapsed]);
+  
+  useEffect(() => {
+    getAllDataTeller().then(setDataTeller).catch(() => setDataTeller([])).finally(() => setLoadingTeller(false));
+  }, []);
+  
+  useEffect(() => {
+    getAllDataPasmar().then(setDataPasmar).catch(() => setDataPasmar([]));
+  }, []);
 
   const loadData = useCallback(async () => {
     setLoading(true);
@@ -74,6 +86,8 @@ export default function App() {
         <main className="flex-1 min-w-0 overflow-x-hidden pb-24 lg:pb-0">
           {page === "dashboard"   && <Dashboard  data={data} loading={loading} onNavigate={handleNavigate} />}
           {page === "sawrangking" && <SAWRanking />}
+          {page === "tellerdashboard" && <TellerDashboard data={dataTeller} loading={loadingTeller} />}
+          {page === "pasmar" && <PasmarDashboard data={dataPasmar} />}
           {page === "crud"        && <Crud data={data} loading={loading} onRefresh={loadData} />}
         </main>
 
