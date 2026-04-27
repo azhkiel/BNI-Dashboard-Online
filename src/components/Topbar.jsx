@@ -1,9 +1,10 @@
-import { CalendarDays, Menu, Plus, ArrowLeft, LayoutDashboard, FilePen, Star } from "lucide-react";
+import { CalendarDays, Menu, Plus, ArrowLeft, LayoutDashboard, FilePen, Star, LogOut } from "lucide-react";
 
 const PAGE_META = {
   dashboard:   { title: "Dashboard Produksi",    sub: "Data real-time per hari ini" },
   sawrangking: { title: "SAW Ranking",           sub: "Peringkat kinerja BAS berdasarkan SAW" },
   tellerdashboard: { title: "Data Teller",       sub: "Data Teller real-time per hari ini" },
+  pasmar: { title: "Data Pasmar",       sub: "Data Pasmar real-time per hari ini" },
   crud:        { title: "Input & Kelola Data",   sub: "Tambah, edit, atau hapus data produksi" },
 };
 

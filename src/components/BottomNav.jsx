@@ -8,11 +8,6 @@ const NAV_ITEMS = [
 
 export default function BottomNav({ page, onNavigate }) {
   return (
-    /*
-      Visible only on mobile (lg:hidden).
-      Fixed to bottom, above everything (z-[35]).
-      Extra safe-area padding for notched phones.
-    */
     <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-[35] flex bg-white border-t border-[rgba(0,63,135,0.1)] shadow-[0_-4px_20px_rgba(0,63,135,0.1)]">
       {NAV_ITEMS.map(({ id, label, icon: Icon }) => {
         const active = page === id;

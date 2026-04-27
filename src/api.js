@@ -1,3 +1,4 @@
+//src/api.js
 import BASE_URL from "./config";
 
 export async function getAllData() {
