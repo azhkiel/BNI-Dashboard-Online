@@ -1,7 +1,7 @@
 // components/Sidebar.jsx
 import {
   LayoutDashboard, Star, FilePen, BookUser, FileSpreadsheet,
-  X, ChevronLeft, BookDashed, LogOut   // ✅ tambah LogOut
+  X, ChevronLeft, BookDashed, LogOut, AlignEndHorizontal  // ✅ tambah LogOut
 } from "lucide-react";
 
 const NAV_ITEMS = [
@@ -9,6 +9,7 @@ const NAV_ITEMS = [
   { id: "sawrangking",      label: "SAW Ranking",       icon: Star },
   { id: "tellerdashboard",  label: "Teller Dashboard",  icon: BookDashed },
   { id: "pasmar",           label: "Pasmar Dashboard",  icon: BookUser },
+  { id: "kmeans",           label: "K Means Method",  icon: AlignEndHorizontal },
   { id: "crud",             label: "Input / Edit Data", icon: FilePen },
 ];
 

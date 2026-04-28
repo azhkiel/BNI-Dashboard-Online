@@ -11,6 +11,7 @@ import SAWRanking from "./pages/SAWRanking";
 import TellerDashboard from "./pages/TellerDashboard";
 import PasmarDashboard from "./pages/PasmarDashboard";
 import Login from "./pages/Login";
+import KMeansDashboard from "./pages/KMeansDashboard";
 import "./global.css";
 
 // ── SESSION HELPERS ────────────────────────────────────────────────────────
@@ -68,7 +69,6 @@ export default function App() {
     catch {}
   }, [collapsed]);
 
-  // ✅ Periksa expiry session secara berkala (setiap 5 menit)
   // Ini memastikan user yang meninggalkan tab terbuka tetap aman di-logout.
   useEffect(() => {
     if (!session) return;
@@ -173,6 +173,7 @@ export default function App() {
           {page === "sawrangking"     && <SAWRanking />}
           {page === "tellerdashboard" && <TellerDashboard data={dataTeller} loading={loadingTeller} />}
           {page === "pasmar"          && <PasmarDashboard data={dataPasmar} />}
+          {page === "kmeans" && <KMeansDashboard data={dataTeller} loading={loadingTeller} />}
           {page === "crud"            && <Crud data={data} loading={loading} onRefresh={loadData} />}
         </main>
 
