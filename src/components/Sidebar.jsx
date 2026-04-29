@@ -1,16 +1,37 @@
-// components/Sidebar.jsx
 import {
-  LayoutDashboard, Star, FilePen, BookUser, FileSpreadsheet,
-  X, ChevronLeft, BookDashed, LogOut, AlignEndHorizontal  // ✅ tambah LogOut
+  LayoutDashboard, Star, Monitor, Users,
+  Crosshair, GitBranch, TrendingUp, AlertTriangle,
+  Activity, Waves, FilePen,
+  LogOut, ChevronLeft, X
 } from "lucide-react";
 
-const NAV_ITEMS = [
-  { id: "dashboard",        label: "Dashboard",         icon: LayoutDashboard },
-  { id: "sawrangking",      label: "SAW Ranking",       icon: Star },
-  { id: "tellerdashboard",  label: "Teller Dashboard",  icon: BookDashed },
-  { id: "pasmar",           label: "Pasmar Dashboard",  icon: BookUser },
-  { id: "kmeans",           label: "K Means Method",  icon: AlignEndHorizontal },
-  { id: "crud",             label: "Input / Edit Data", icon: FilePen },
+const NAV_GROUPS = [
+  {
+    label: "Menu Utama",
+    items: [
+      { id: "dashboard",       label: "Dashboard",        icon: LayoutDashboard },
+      { id: "sawrangking",     label: "SAW Ranking",      icon: Star },
+      { id: "tellerdashboard", label: "Teller Dashboard", icon: Monitor },
+      { id: "pasmar",          label: "Pasmar Dashboard", icon: Users },
+    ],
+  },
+  {
+    label: "Analitik",
+    items: [
+      { id: "kmeans",  label: "K-Means Method",   icon: Crosshair },
+      { id: "dbscan",  label: "DBSCAN",           icon: GitBranch },
+      { id: "regresi", label: "Regresi",          icon: TrendingUp },
+      { id: "if",      label: "Isolation Forest", icon: AlertTriangle },
+      { id: "auto",    label: "Auto Encoder",     icon: Activity },
+      { id: "lstm",    label: "LSTM",             icon: Waves },
+    ],
+  },
+  {
+    label: "Data",
+    items: [
+      { id: "crud", label: "Input / Edit Data", icon: FilePen },
+    ],
+  },
 ];
 
 function NavItem({ item, active, collapsed, onClick }) {
@@ -51,7 +72,6 @@ function NavItem({ item, active, collapsed, onClick }) {
   );
 }
 
-// ✅ Komponen tombol logout terpisah
 function LogoutButton({ collapsed, onLogout }) {
   return (
     <button
@@ -81,7 +101,6 @@ function LogoutButton({ collapsed, onLogout }) {
   );
 }
 
-// ✅ Tambah onLogout ke props
 export default function Sidebar({ page, onNavigate, isOpen, onClose, collapsed, onCollapse, onLogout }) {
   return (
     <>
@@ -147,57 +166,31 @@ export default function Sidebar({ page, onNavigate, isOpen, onClose, collapsed, 
             </div>
           </div>
 
-          <p className={[
-            "text-[9px] font-bold uppercase tracking-[0.12em] text-white/40 px-3 mb-1.5 whitespace-nowrap transition-all duration-[280ms] overflow-hidden",
-            collapsed ? "opacity-0 max-w-0" : "opacity-100 max-w-full",
-          ].join(" ")}>
-            Menu Utama
-          </p>
-
-          <nav className="flex flex-col gap-1">
-            {NAV_ITEMS.map((item) => (
-              <NavItem
-                key={item.id}
-                item={item}
-                active={page === item.id}
-                collapsed={collapsed}
-                onClick={() => { onNavigate(item.id); onClose(); }}
-              />
+          <nav className="flex flex-col gap-4">
+            {NAV_GROUPS.map((group) => (
+              <div key={group.label}>
+                <p className={[
+                  "text-[9px] font-bold uppercase tracking-[0.12em] text-white/40 px-3 mb-1.5 whitespace-nowrap transition-all duration-[280ms] overflow-hidden",
+                  collapsed ? "opacity-0 max-w-0" : "opacity-100 max-w-full",
+                ].join(" ")}>
+                  {group.label}
+                </p>
+                <div className="flex flex-col gap-1">
+                  {group.items.map((item) => (
+                    <NavItem
+                      key={item.id}
+                      item={item}
+                      active={page === item.id}
+                      collapsed={collapsed}
+                      onClick={() => { onNavigate(item.id); onClose(); }}
+                    />
+                  ))}
+                </div>
+              </div>
             ))}
-{/* 
-            <a
-              href="https://docs.google.com/spreadsheets/d/1MPb4aMPFwzZM_xheqP_Gzrxf8Gn-eMxa-NOyqRekJgQ/edit?usp=sharing"
-              target="_blank"
-              rel="noreferrer"
-              onClick={onClose}
-              title={collapsed ? "Data Excel" : undefined}
-              className="relative flex items-center gap-2.5 w-full text-left px-3 py-2.5 rounded-xl text-[14px] font-medium no-underline bg-transparent text-white/70 hover:bg-white/10 hover:text-white/95 transition-all duration-200 group overflow-hidden"
-            >
-              <FileSpreadsheet size={17} className="shrink-0" />
-              <span className={[
-                "whitespace-nowrap overflow-hidden transition-all duration-[280ms]",
-                collapsed ? "max-w-0 opacity-0" : "max-w-[160px] opacity-100",
-              ].join(" ")}>
-                Data Excel
-              </span>
-              {collapsed && (
-                <span className="
-                  pointer-events-none absolute left-[calc(100%+8px)] top-1/2 -translate-y-1/2
-                  bg-[#002960] text-white text-xs font-semibold px-3 py-1.5 rounded-lg
-                  whitespace-nowrap shadow-lg
-                  opacity-0 group-hover:opacity-100 translate-x-1 group-hover:translate-x-0
-                  transition-all duration-150 z-50
-                ">
-                  Data Excel
-                </span>
-              )}
-            </a> */}
           </nav>
 
-          <div className={[
-            "mt-auto pt-5 transition-all duration-[280ms]",
-            collapsed ? "px-0" : "px-0",
-          ].join(" ")}>
+          <div className="mt-auto pt-5">
             <div className="border-t border-white/10 mb-2" />
             <LogoutButton collapsed={collapsed} onLogout={onLogout} />
           </div>
