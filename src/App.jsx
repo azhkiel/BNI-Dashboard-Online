@@ -12,7 +12,12 @@ import TellerDashboard from "./pages/TellerDashboard";
 import PasmarDashboard from "./pages/PasmarDashboard";
 import Login from "./pages/Login";
 import KMeansDashboard from "./pages/KMeansDashboard";
+import DBSCANDashboard from "./pages/DBSCANDashboard";
+import RegresiDashboard from "./pages/RegresiDashboard";
 import "./global.css";
+import IsolationForestDashboard from "./pages/IsolationForestDashboard";
+import AutoencoderDashboard from "./pages/AutoencoderDashboard";
+import LSTMDashboard from "./pages/LstmDashboard";
 
 // ── SESSION HELPERS ────────────────────────────────────────────────────────
 
@@ -173,7 +178,12 @@ export default function App() {
           {page === "sawrangking"     && <SAWRanking />}
           {page === "tellerdashboard" && <TellerDashboard data={dataTeller} loading={loadingTeller} />}
           {page === "pasmar"          && <PasmarDashboard data={dataPasmar} />}
-          {page === "kmeans" && <KMeansDashboard data={dataTeller} loading={loadingTeller} />}
+          {page === "kmeans"          && <KMeansDashboard data={dataTeller} loading={loadingTeller} />}
+          {page === "dbscan"          && <DBSCANDashboard data={dataTeller} loading={loadingTeller} />}
+          {page === "regresi"         && <RegresiDashboard data={dataTeller} loading={loadingTeller} />}
+          {page === "if"              && <IsolationForestDashboard data={dataTeller} loading={loadingTeller} />}
+          {page === "auto"              && <AutoencoderDashboard data={dataTeller} loading={loadingTeller} />}
+          {page === "lstm"              && <LSTMDashboard data={dataTeller} loading={loadingTeller} />}
           {page === "crud"            && <Crud data={data} loading={loading} onRefresh={loadData} />}
         </main>
 

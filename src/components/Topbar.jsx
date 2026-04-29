@@ -1,13 +1,21 @@
-import { CalendarDays, Menu, Plus, ArrowLeft, LayoutDashboard, FilePen, Star, LogOut } from "lucide-react";
+import { CalendarDays, Menu, Plus, ArrowLeft } from "lucide-react";
 
 const PAGE_META = {
-  dashboard:   { title: "Dashboard Produksi",    sub: "Data real-time per hari ini" },
-  sawrangking: { title: "SAW Ranking",           sub: "Peringkat kinerja BAS berdasarkan SAW" },
-  tellerdashboard: { title: "Data Teller",       sub: "Data Teller real-time per hari ini" },
-  pasmar: { title: "Data Pasmar",       sub: "Data Pasmar real-time per hari ini" },
-  kmeans: { title: "Metode KMeans Data Teller",       sub: "Perhitungan metode KMeans untuk Data Teller" },
-  crud:        { title: "Input & Kelola Data",   sub: "Tambah, edit, atau hapus data produksi" },
+  dashboard:       { title: "Dashboard Produksi",              sub: "Data real-time per hari ini" },
+  sawrangking:     { title: "SAW Ranking",                     sub: "Peringkat kinerja BAS berdasarkan SAW" },
+  tellerdashboard: { title: "Teller Dashboard",                sub: "Data Teller real-time per hari ini" },
+  pasmar:          { title: "Pasmar Dashboard",                sub: "Data Pasmar real-time per hari ini" },
+  kmeans:          { title: "K-Means Method",                  sub: "Perhitungan metode K-Means untuk Data Teller" },
+  dbscan:          { title: "DBSCAN",                          sub: "Analisis klaster berbasis densitas" },
+  regresi:         { title: "Regresi",                         sub: "Model prediksi berbasis regresi" },
+  if:              { title: "Isolation Forest",                sub: "Deteksi anomali dengan Isolation Forest" },
+  auto:            { title: "Auto Encoder",                    sub: "Reduksi dimensi & deteksi anomali" },
+  lstm:            { title: "LSTM",                            sub: "Prediksi time-series dengan LSTM" },
+  crud:            { title: "Input & Kelola Data",             sub: "Tambah, edit, atau hapus data produksi" },
 };
+
+// Halaman yang termasuk grup Analitik — tidak perlu tombol "Tambah Data"
+const ANALITIK_PAGES = ["kmeans", "dbscan", "regresi", "if", "auto", "lstm"];
 
 export default function Topbar({ page, onNavigate, onOpenSidebar }) {
   const dateStr = new Date().toLocaleDateString("id-ID", {
@@ -15,41 +23,46 @@ export default function Topbar({ page, onNavigate, onOpenSidebar }) {
   });
 
   const meta = PAGE_META[page] ?? PAGE_META.dashboard;
+  const isHome = page === "dashboard";
+  const isAnalitik = ANALITIK_PAGES.includes(page);
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between gap-3 px-8 h-16 bg-white border-b border-[rgba(0,63,135,0.08)] shadow-[0_2px_12px_rgba(0,63,135,0.05)] flex-shrink-0">
 
-      {/* ── Left: hamburger + page title ── */}
-      <div className="flex items-center gap-3">
+      {/* ── Kiri: hamburger + judul halaman ── */}
+      <div className="flex items-center gap-3 min-w-0">
 
-        {/* Hamburger — only visible on tablet/mobile (lg:hidden) */}
+        {/* Hamburger — hanya muncul di mobile/tablet */}
         <button
           onClick={onOpenSidebar}
           aria-label="Buka menu"
-          className="lg:hidden flex flex-col justify-center items-center w-10 h-10 gap-[5px] rounded-xl bg-[#EEF4FF] border-none cursor-pointer transition-colors duration-200 hover:bg-[#d8e6ff] shrink-0"
+          className="lg:hidden flex items-center justify-center w-10 h-10 rounded-xl bg-[#EEF4FF] border-none cursor-pointer transition-colors duration-200 hover:bg-[#d8e6ff] shrink-0"
         >
           <Menu size={18} className="text-[#003F87]" />
         </button>
 
-        <div>
-          <h1 className="text-[18px] font-extrabold text-[#002960] leading-tight">
+        <div className="min-w-0">
+          <h1 className="text-[18px] font-extrabold text-[#002960] leading-tight truncate">
             {meta.title}
           </h1>
-          <p className="text-xs text-slate-400 mt-0.5">{meta.sub}</p>
+          <p className="text-xs text-slate-400 mt-0.5 truncate">{meta.sub}</p>
         </div>
       </div>
 
-      {/* ── Right: date chip + action button ── */}
-      <div className="flex items-center gap-3">
+      {/* ── Kanan: tanggal + tombol aksi ── */}
+      <div className="flex items-center gap-3 shrink-0">
 
-        {/* Date — hidden on small screens */}
+        {/* Chip tanggal — disembunyikan di layar kecil */}
         <div className="hidden sm:flex items-center gap-2 text-xs text-slate-400 bg-slate-50 border border-slate-100 rounded-xl px-3 py-2 whitespace-nowrap">
           <CalendarDays size={13} className="text-slate-300" />
           {dateStr}
         </div>
 
-        {/* Action button */}
-        {page === "dashboard" ? (
+        {/* Tombol aksi:
+            - Dashboard   → "Tambah Data" (oranye)
+            - Analitik    → tidak ada tombol aksi (hanya data view)
+            - Halaman lain → "Kembali ke Dashboard" (biru) */}
+        {isHome && (
           <button
             onClick={() => onNavigate("crud")}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white
@@ -62,7 +75,9 @@ export default function Topbar({ page, onNavigate, onOpenSidebar }) {
             <Plus size={15} />
             <span className="hidden sm:inline">Tambah Data</span>
           </button>
-        ) : (
+        )}
+
+        {!isHome && !isAnalitik && (
           <button
             onClick={() => onNavigate("dashboard")}
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold text-white
