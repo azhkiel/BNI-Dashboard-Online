@@ -1,3 +1,4 @@
+//src/pages/DBSCANDashboard.jsx
 import { useState, useMemo } from "react";
 import {
   ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip,
