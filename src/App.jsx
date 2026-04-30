@@ -1,10 +1,7 @@
-// App.jsx — dengan sistem login + session expiry
 import { useState, useEffect, useCallback } from "react";
-import { getAllData } from "./api";
-import { getAllDataTeller } from "./api";
+import { getAllData, getAllDataTeller, getAllDataPasmar } from "./api";
 import Sidebar from "./components/Sidebar";
 import Topbar from "./components/Topbar";
-import BottomNav from "./components/BottomNav";
 import Dashboard from "./pages/Dashboard";
 import Crud from "./pages/Crud";
 import SAWRanking from "./pages/SAWRanking";
@@ -14,27 +11,24 @@ import Login from "./pages/Login";
 import KMeansDashboard from "./pages/KMeansDashboard";
 import DBSCANDashboard from "./pages/DBSCANDashboard";
 import RegresiDashboard from "./pages/RegresiDashboard";
-import "./global.css";
 import IsolationForestDashboard from "./pages/IsolationForestDashboard";
 import AutoencoderDashboard from "./pages/AutoencoderDashboard";
 import LSTMDashboard from "./pages/LstmDashboard";
+import "./global.css";
 
 // ── SESSION HELPERS ────────────────────────────────────────────────────────
 
-/**
- * Baca session dari localStorage dan validasi expiry-nya.
- * Mengembalikan null jika tidak ada atau sudah kadaluarsa.
- */
+const SESSION_KEY = "bni_session";
+
 function getStoredSession() {
   try {
-    const raw = localStorage.getItem("bni_session");
+    const raw = localStorage.getItem(SESSION_KEY);
     if (!raw) return null;
 
     const session = JSON.parse(raw);
 
-    // ✅ Cek expiry — jika sudah lewat, hapus dan anggap tidak login
     if (session.expiresAt && new Date() > new Date(session.expiresAt)) {
-      localStorage.removeItem("bni_session");
+      localStorage.removeItem(SESSION_KEY);
       return null;
     }
 
@@ -45,86 +39,78 @@ function getStoredSession() {
 }
 
 function clearSession() {
-  try { localStorage.removeItem("bni_session"); } catch {}
-}
-
-function handleLogout() {
-  localStorage.removeItem("bni_session");
-  setSession(null); // atau state apapun yang kamu pakai untuk track login
+  try {
+    localStorage.removeItem(SESSION_KEY);
+  } catch {}
 }
 
 // ── APP ────────────────────────────────────────────────────────────────────
-export default function App() {
-  const [session, setSession]     = useState(() => getStoredSession());
-  const [page, setPage]           = useState("dashboard");
-  const [data, setData]           = useState(null);
-  const [loading, setLoading]     = useState(true);
-  const [sidebarOpen, setSidebar] = useState(false);
-  const [dataTeller, setDataTeller]       = useState(null);
-  const [loadingTeller, setLoadingTeller] = useState(true);
-  const [dataPasmar, setDataPasmar]       = useState(null);
 
-  const [collapsed, setCollapsed] = useState(() => {
+export default function App() {
+  const [session, setSession]         = useState(() => getStoredSession());
+  const [page, setPage]               = useState("dashboard");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [collapsed, setCollapsed]     = useState(() => {
     try { return localStorage.getItem("sidebar-collapsed") === "true"; }
     catch { return false; }
   });
 
+  const [data, setData]               = useState(null);
+  const [dataLoading, setDataLoading] = useState(true);
+  const [dataTeller, setDataTeller]   = useState(null);
+  const [tellerLoading, setTellerLoading] = useState(true);
+  const [dataPasmar, setDataPasmar]   = useState(null);
+
+  // ── Persist sidebar collapsed state
   useEffect(() => {
     try { localStorage.setItem("sidebar-collapsed", String(collapsed)); }
     catch {}
   }, [collapsed]);
 
-  // Ini memastikan user yang meninggalkan tab terbuka tetap aman di-logout.
+  // ── Auto-logout when session expires (checked every 5 minutes)
   useEffect(() => {
     if (!session) return;
-
     const interval = setInterval(() => {
-      const valid = getStoredSession();
-      if (!valid) {
-        handleLogout();
-      }
-    }, 5 * 60 * 1000); // cek tiap 5 menit
-
+      if (!getStoredSession()) handleLogout();
+    }, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, [session]);
 
-  // Load data hanya jika sudah login
-  useEffect(() => {
-    if (!session) return;
-    getAllDataTeller()
-      .then(setDataTeller)
-      .catch(() => setDataTeller([]))
-      .finally(() => setLoadingTeller(false));
-  }, [session]);
-
-  useEffect(() => {
-    if (!session) return;
-    import("./api").then(({ getAllDataPasmar }) => {
-      getAllDataPasmar()
-        .then(setDataPasmar)
-        .catch(() => setDataPasmar([]));
-    });
-  }, [session]);
-
+  // ── Fetch main data
   const loadData = useCallback(async () => {
     if (!session) return;
-    setLoading(true);
+    setDataLoading(true);
     try {
-      const d = await getAllData();
-      setData(d);
+      setData(await getAllData());
     } catch (err) {
       console.error("Gagal memuat data:", err);
       setData([]);
     } finally {
-      setLoading(false);
+      setDataLoading(false);
     }
   }, [session]);
 
   useEffect(() => { loadData(); }, [loadData]);
 
-  const handleLogin = (newSession) => {
-    setSession(newSession);
-  };
+  // ── Fetch teller data
+  useEffect(() => {
+    if (!session) return;
+    getAllDataTeller()
+      .then(setDataTeller)
+      .catch(() => setDataTeller([]))
+      .finally(() => setTellerLoading(false));
+  }, [session]);
+
+  // ── Fetch pasmar data
+  useEffect(() => {
+    if (!session) return;
+    getAllDataPasmar()
+      .then(setDataPasmar)
+      .catch(() => setDataPasmar([]));
+  }, [session]);
+
+  // ── Handlers
+  const handleLogin = (newSession) => setSession(newSession);
 
   const handleLogout = () => {
     clearSession();
@@ -137,15 +123,14 @@ export default function App() {
 
   const handleNavigate = (newPage) => {
     setPage(newPage);
-    setSidebar(false);
+    setSidebarOpen(false);
   };
 
-  // ── Belum login → tampilkan halaman Login ──
-  if (!session) {
-    return <Login onLogin={handleLogin} />;
-  }
+  // ── Render
+  if (!session) return <Login onLogin={handleLogin} />;
 
-  // ── Sudah login → tampilkan dashboard ──
+  const tellerProps = { data: dataTeller, loading: tellerLoading };
+
   return (
     <div className="flex min-h-screen bg-[#F0F4FA] overflow-x-hidden">
 
@@ -153,7 +138,7 @@ export default function App() {
         page={page}
         onNavigate={handleNavigate}
         isOpen={sidebarOpen}
-        onClose={() => setSidebar(false)}
+        onClose={() => setSidebarOpen(false)}
         collapsed={collapsed}
         onCollapse={setCollapsed}
         onLogout={handleLogout}
@@ -168,28 +153,26 @@ export default function App() {
         <Topbar
           page={page}
           onNavigate={handleNavigate}
-          onOpenSidebar={() => setSidebar(true)}
+          onOpenSidebar={() => setSidebarOpen(true)}
           session={session}
           onLogout={handleLogout}
         />
 
         <main className="flex-1 min-w-0 overflow-x-hidden pb-24 lg:pb-0">
-          {page === "dashboard"       && <Dashboard  data={data} loading={loading} onNavigate={handleNavigate} />}
+          {page === "dashboard"       && <Dashboard data={data} loading={dataLoading} onNavigate={handleNavigate} />}
+          {page === "crud"            && <Crud data={data} loading={dataLoading} onRefresh={loadData} />}
           {page === "sawrangking"     && <SAWRanking />}
-          {page === "tellerdashboard" && <TellerDashboard data={dataTeller} loading={loadingTeller} />}
+          {page === "tellerdashboard" && <TellerDashboard {...tellerProps} />}
           {page === "pasmar"          && <PasmarDashboard data={dataPasmar} />}
-          {page === "kmeans"          && <KMeansDashboard data={dataTeller} loading={loadingTeller} />}
-          {page === "dbscan"          && <DBSCANDashboard data={dataTeller} loading={loadingTeller} />}
-          {page === "regresi"         && <RegresiDashboard data={dataTeller} loading={loadingTeller} />}
-          {page === "if"              && <IsolationForestDashboard data={dataTeller} loading={loadingTeller} />}
-          {page === "auto"              && <AutoencoderDashboard data={dataTeller} loading={loadingTeller} />}
-          {page === "lstm"              && <LSTMDashboard data={dataTeller} loading={loadingTeller} />}
-          {page === "crud"            && <Crud data={data} loading={loading} onRefresh={loadData} />}
+          {page === "kmeans"          && <KMeansDashboard {...tellerProps} />}
+          {page === "dbscan"          && <DBSCANDashboard {...tellerProps} />}
+          {page === "regresi"         && <RegresiDashboard {...tellerProps} />}
+          {page === "if"              && <IsolationForestDashboard {...tellerProps} />}
+          {page === "auto"            && <AutoencoderDashboard {...tellerProps} />}
+          {page === "lstm"            && <LSTMDashboard {...tellerProps} />}
         </main>
 
       </div>
-
-      <BottomNav page={page} onNavigate={handleNavigate} />
     </div>
   );
 }
