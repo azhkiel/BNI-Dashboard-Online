@@ -164,7 +164,6 @@ export default function TellerDashboard({ data: propData, loading = false }) {
       avg: data.length ? Math.round(totalAmt / data.length) : 0,
     };
   }, [data]);
-
   // Hour chart
   const hourData = useMemo(() => {
     const map = {};
@@ -175,13 +174,11 @@ export default function TellerDashboard({ data: propData, loading = false }) {
     });
     return Object.values(map).sort((a, b) => parseInt(a.hour) - parseInt(b.hour));
   }, [data]);
-
   // Pie: CR vs DR
   const typeData = useMemo(() => [
     { name: "CR", value: stats.crCount, color: BNI_BLUE2 },
     { name: "DR", value: stats.drCount, color: RED },
   ], [stats]);
-
   // Bar: amount per tran code
   const codeData = useMemo(() => {
     const g = groupSum(data, "TRAN_CODE", "AMOUNT");
@@ -189,13 +186,11 @@ export default function TellerDashboard({ data: propData, loading = false }) {
       .map(([k, v]) => ({ code: k, amount: v }))
       .sort((a, b) => b.amount - a.amount);
   }, [data]);
-
   // Bar: SYS count
   const sysData = useMemo(() => {
     const g = groupSum(data, "SYS");
     return Object.entries(g).map(([k, v], i) => ({ sys: k, count: v, color: PALETTE[i % PALETTE.length] }));
   }, [data]);
-
   // Bar: net flow per teller
   const tellerData = useMemo(() => {
     const tellers = [...new Set(data.map(r => r.TELLER))].sort();
@@ -206,12 +201,19 @@ export default function TellerDashboard({ data: propData, loading = false }) {
       return { teller: t, net: cr - dr, cr, dr };
     });
   }, [data]);
-
   // Line: cumulative CR per hour
-  const cumulData = useMemo(() => {
+  const cumulDataCr = useMemo(() => {
     let acc = 0;
     return hourData.map(h => {
       const crRows = data.filter(r => r.DATETIME.includes(h.hour.replace(":00","")) && r.TYPE === "CR");
+      acc += crRows.reduce((s, r) => s + Number(r.AMOUNT), 0);
+      return { hour: h.hour, cumul: acc };
+    });
+  }, [data, hourData]);
+  const cumulDataDr = useMemo(() => {
+    let acc = 0;
+    return hourData.map(h => {
+      const crRows = data.filter(r => r.DATETIME.includes(h.hour.replace(":00","")) && r.TYPE === "DR");
       acc += crRows.reduce((s, r) => s + Number(r.AMOUNT), 0);
       return { hour: h.hour, cumul: acc };
     });
@@ -248,6 +250,7 @@ export default function TellerDashboard({ data: propData, loading = false }) {
 
   // ── RENDER ──
   return (
+    
     <div style={{ padding: "24px 28px 40px", background: "#F0F4FA", minHeight: "100vh" }}>
 
       {/* Header */}
@@ -383,12 +386,26 @@ export default function TellerDashboard({ data: propData, loading = false }) {
       <div style={{ marginBottom: 16 }}>
         <ChartCard title="Akumulasi CR per jam" sub="Total nilai credit yang terakumulasi sepanjang hari" badge="Tren">
           <ResponsiveContainer width="100%" height={160}>
-            <LineChart data={cumulData}>
+            <LineChart data={cumulDataCr}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" vertical={false} />
               <XAxis dataKey="hour" tick={{ fontSize: 11, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 11, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={fmtIDR} />
               <Tooltip content={<CustomTooltip formatter={fmtFull} />} />
               <Line type="monotone" dataKey="cumul" name="Kumulatif CR" stroke={BNI_ORANGE} strokeWidth={2.5} dot={{ r: 4, fill: BNI_ORANGE }} activeDot={{ r: 6 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </ChartCard>
+      </div>
+      {/* Row 4: Cumulative CR line chart */}
+      <div style={{ marginBottom: 16 }}>
+        <ChartCard title="Akumulasi DR per jam" sub="Total nilai debit yang terakumulasi sepanjang hari" badge="Tren">
+          <ResponsiveContainer width="100%" height={160}>
+            <LineChart data={cumulDataDr}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.05)" vertical={false} />
+              <XAxis dataKey="hour" tick={{ fontSize: 11, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 11, fill: "#94a3b8" }} axisLine={false} tickLine={false} tickFormatter={fmtIDR} />
+              <Tooltip content={<CustomTooltip formatter={fmtFull} />} />
+              <Line type="monotone" dataKey="cumul" name="Kumulatif DR" stroke={BNI_ORANGE} strokeWidth={2.5} dot={{ r: 4, fill: BNI_ORANGE }} activeDot={{ r: 6 }} />
             </LineChart>
           </ResponsiveContainer>
         </ChartCard>

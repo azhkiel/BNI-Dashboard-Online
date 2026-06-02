@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback } from "react";
 import { getAllData, getAllDataTeller, getAllDataPasmar } from "./api";
 import Sidebar from "./components/Sidebar";
 import Topbar from "./components/Topbar";
-import Dashboard from "./pages/Dashboard";
-import Crud from "./pages/Crud";
+import LifeDashboard from "./pages/LifeDashboard";
+import LifeCRUD from "./pages/LifeCRUD";
 import SAWRanking from "./pages/SAWRanking";
 import TellerDashboard from "./pages/TellerDashboard";
 import PasmarDashboard from "./pages/PasmarDashboard";
@@ -14,6 +14,7 @@ import RegresiDashboard from "./pages/RegresiDashboard";
 import IsolationForestDashboard from "./pages/IsolationForestDashboard";
 import AutoencoderDashboard from "./pages/AutoencoderDashboard";
 import LSTMDashboard from "./pages/LstmDashboard";
+import MachineLearningPage from "./pages/MachineLearningPage";
 import "./global.css";
 
 // ── SESSION HELPERS ────────────────────────────────────────────────────────
@@ -159,8 +160,8 @@ export default function App() {
         />
 
         <main className="flex-1 min-w-0 overflow-x-hidden pb-24 lg:pb-0">
-          {page === "dashboard"       && <Dashboard data={data} loading={dataLoading} onNavigate={handleNavigate} />}
-          {page === "crud"            && <Crud data={data} loading={dataLoading} onRefresh={loadData} />}
+          {page === "dashboard"       && <LifeDashboard data={data} loading={dataLoading} onNavigate={handleNavigate} />}
+          {page === "crud"            && <LifeCRUD data={data} loading={dataLoading} onRefresh={loadData} />}
           {page === "sawrangking"     && <SAWRanking />}
           {page === "tellerdashboard" && <TellerDashboard {...tellerProps} />}
           {page === "pasmar"          && <PasmarDashboard data={dataPasmar} />}
@@ -170,6 +171,7 @@ export default function App() {
           {page === "if"              && <IsolationForestDashboard {...tellerProps} />}
           {page === "auto"            && <AutoencoderDashboard {...tellerProps} />}
           {page === "lstm"            && <LSTMDashboard {...tellerProps} />}
+          {page === "ml" && <MachineLearningPage />}
         </main>
 
       </div>

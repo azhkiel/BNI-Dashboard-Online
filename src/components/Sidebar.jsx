@@ -2,14 +2,14 @@ import {
   LayoutDashboard, Star, Monitor, Users,
   Crosshair, GitBranch, TrendingUp, AlertTriangle,
   Activity, Waves, FilePen,
-  LogOut, ChevronLeft, X
+  LogOut, ChevronLeft, X, Cpu
 } from "lucide-react";
 
 const NAV_GROUPS = [
   {
     label: "Menu Utama",
     items: [
-      { id: "dashboard",       label: "Dashboard",        icon: LayoutDashboard },
+      { id: "dashboard",       label: "Life Dashboard",        icon: LayoutDashboard },
       { id: "sawrangking",     label: "SAW Ranking",      icon: Star },
       { id: "tellerdashboard", label: "Teller Dashboard", icon: Monitor },
       { id: "pasmar",          label: "Pasmar Dashboard", icon: Users },
@@ -19,6 +19,7 @@ const NAV_GROUPS = [
     label: "Analitik",
     items: [
       { id: "kmeans",  label: "K-Means Method",   icon: Crosshair },
+      { id: "ml", label: "Machine Learning", icon: Cpu },
       { id: "dbscan",  label: "DBSCAN",           icon: GitBranch },
       { id: "regresi", label: "Regresi",          icon: TrendingUp },
       { id: "if",      label: "Isolation Forest", icon: AlertTriangle },

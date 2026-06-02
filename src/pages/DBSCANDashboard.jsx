@@ -1,5 +1,4 @@
 // src/pages/DBSCANDashboard.jsx
-// Style: BNI Life Insurance Design System (DM Sans + Playfair Display)
 import { useState, useMemo } from "react";
 import {
   ScatterChart, Scatter, XAxis, YAxis, CartesianGrid, Tooltip,

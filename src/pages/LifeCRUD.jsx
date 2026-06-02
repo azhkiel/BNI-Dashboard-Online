@@ -109,7 +109,7 @@ function Pagination({ currentPage, totalPages, totalItems, onPageChange }) {
 }
 
 // ── Main Component ─────────────────────────────────────────────
-export default function Crud({ data, loading, onRefresh }) {
+export default function LifeCRUD({ data, loading, onRefresh }) {
   const [form, setForm]        = useState(EMPTY_FORM);
   const [editRow, setEdit]     = useState(null);
   const [saving, setSaving]    = useState(false);

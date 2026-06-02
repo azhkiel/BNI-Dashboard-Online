@@ -120,7 +120,7 @@ function ChartCard({ title, subtitle, badge, children }) {
 }
 
 // ── Main Dashboard ──
-export default function Dashboard({ data, loading }) {
+export default function LifeDashboard({ data, loading }) {
   const monthlyRef   = useRef(null);
   const productRef   = useRef(null);
   const basRef       = useRef(null);
