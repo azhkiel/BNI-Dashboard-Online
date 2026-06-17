@@ -22,53 +22,31 @@ function SuccessPopup({ nama }) {
     hour < 18 ? "Selamat Sore" : "Selamat Malam";
 
   return (
-    <div style={{
-      position: "fixed", inset: 0,
-      background: "rgba(0,41,96,0.45)",
-      backdropFilter: "blur(6px)",
-      display: "flex", alignItems: "center", justifyContent: "center",
-      zIndex: 9999,
-      animation: "overlayIn .3s ease",
-    }}>
-      <div style={{
-        background: "white",
-        border: "1px solid rgba(0,63,135,0.1)",
-        borderRadius: 24,
-        padding: "44px 48px",
-        textAlign: "center",
-        maxWidth: 380,
-        width: "90%",
-        boxShadow: "0 32px 80px rgba(0,41,96,0.18), 0 4px 24px rgba(0,63,135,0.1)",
-        animation: "popupIn .35s cubic-bezier(0.175, 0.885, 0.32, 1.275)",
-      }}>
-        <div style={{
-          width: 76, height: 76, borderRadius: "50%",
-          background: "linear-gradient(135deg, #F37021, #e05a00)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          margin: "0 auto 24px",
-          boxShadow: "0 12px 32px rgba(243,112,33,0.35)",
-          animation: "checkPop .5s .2s cubic-bezier(0.175, 0.885, 0.32, 1.275) both",
-        }}>
+    <div className="fixed inset-0 bg-[#002960]/45 backdrop-blur-sm flex items-center justify-center z-[9999]" style={{ animation: "overlayIn .3s ease" }}>
+      <div 
+        className="bg-white border border-[#003F87]/10 rounded-[24px] py-11 px-12 text-center max-w-[380px] w-[90%] shadow-[0_32px_80px_rgba(0,41,96,0.18),0_4px_24px_rgba(0,63,135,0.1)]"
+        style={{ animation: "popupIn .35s cubic-bezier(0.175, 0.885, 0.32, 1.275)" }}
+      >
+        <div 
+          className="w-[76px] h-[76px] rounded-full bg-gradient-to-br from-[#F37021] to-[#e05a00] flex items-center justify-center mx-auto mb-6 shadow-[0_12px_32px_rgba(243,112,33,0.35)]"
+          style={{ animation: "checkPop .5s .2s cubic-bezier(0.175, 0.885, 0.32, 1.275) both" }}
+        >
           <IconCheck size={34} />
         </div>
-        <div style={{ fontSize: 10, fontWeight: 700, color: "#F37021", textTransform: "uppercase", letterSpacing: "0.15em", marginBottom: 8, fontFamily: "'DM Sans', sans-serif" }}>
+        <div className="text-[10px] font-bold text-[#F37021] uppercase tracking-[0.15em] mb-2 font-['DM_Sans']">
           Login Berhasil
         </div>
-        <div style={{ fontSize: 26, fontWeight: 800, color: "#002960", marginBottom: 6, fontFamily: "'Playfair Display', serif", letterSpacing: "-0.3px" }}>
+        <div className="text-[26px] font-extrabold text-[#002960] mb-1.5 font-['Playfair_Display'] tracking-[-0.3px]">
           {greeting}!
         </div>
-        <div style={{ fontSize: 15, color: "#64748b", fontFamily: "'DM Sans', sans-serif", fontWeight: 500 }}>
+        <div className="text-[15px] text-slate-500 font-medium font-['DM_Sans']">
           {nama}
         </div>
-        <div style={{ fontSize: 12, color: "#94a3b8", marginTop: 8, fontFamily: "'DM Sans', sans-serif" }}>
+        <div className="text-xs text-slate-400 mt-2 font-['DM_Sans']">
           Mengalihkan ke dashboard…
         </div>
-        <div style={{ height: 3, background: "#f0f4fa", borderRadius: 99, marginTop: 28, overflow: "hidden" }}>
-          <div style={{
-            height: "100%", borderRadius: 99,
-            background: "linear-gradient(90deg, #F37021, #ff9a50)",
-            animation: "barFill 1.8s linear forwards",
-          }} />
+        <div className="h-[3px] bg-slate-100 rounded-full mt-7 overflow-hidden">
+          <div className="h-full rounded-full bg-gradient-to-r from-[#F37021] to-[#ff9a50]" style={{ animation: "barFill 1.8s linear forwards" }} />
         </div>
       </div>
     </div>
@@ -76,17 +54,11 @@ function SuccessPopup({ nama }) {
 }
 
 // ── STAT CARD (Left Panel) ──────────────────────────────────────────────────
-function StatCard({ value, label, accent }) {
+function StatCard({ value, label }) {
   return (
-    <div style={{
-      background: "rgba(255,255,255,0.12)",
-      backdropFilter: "blur(12px)",
-      border: "1px solid rgba(255,255,255,0.2)",
-      borderRadius: 14,
-      padding: "14px 20px",
-    }}>
-      <div style={{ fontSize: 20, fontWeight: 800, color: "white", fontFamily: "'Playfair Display', serif", letterSpacing: "-0.5px" }}>{value}</div>
-      <div style={{ fontSize: 10, color: "rgba(255,255,255,0.55)", marginTop: 3, fontFamily: "'DM Sans', sans-serif", textTransform: "uppercase", letterSpacing: "0.12em" }}>{label}</div>
+    <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl px-5 py-3.5">
+      <div className="text-xl font-extrabold text-white font-['Playfair_Display'] tracking-[-0.5px]">{value}</div>
+      <div className="text-[10px] text-white/55 mt-1 font-['DM_Sans'] uppercase tracking-[0.12em]">{label}</div>
     </div>
   );
 }
@@ -144,27 +116,12 @@ export default function Login({ onLogin }) {
 
   const handleKeyDown = (e) => { if (e.key === "Enter") handleSubmit(); };
 
-  const inputStyle = (field) => ({
-    display: "flex", alignItems: "center", gap: 12,
-    background: focusedField === field ? "#EEF4FF" : "#F8FAFC",
-    border: `1.5px solid ${
-      focusedField === field ? "#003F87"
-        : error ? "rgba(220,38,38,0.3)"
-        : "#e2e8f0"
-    }`,
-    borderRadius: 12,
-    padding: "12px 16px",
-    transition: "all .2s ease",
-    boxShadow: focusedField === field ? "0 0 0 3px rgba(0,63,135,0.1)" : "none",
-  });
-
   return (
     <>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap');
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
+        /* Custom Keyframes - dipertahankan untuk animasi yang presisi */
         @keyframes overlayIn  { from { opacity: 0 } to { opacity: 1 } }
         @keyframes popupIn    { from { opacity: 0; transform: scale(.85) translateY(16px) } to { opacity: 1; transform: scale(1) translateY(0) } }
         @keyframes checkPop   { from { transform: scale(0) } to { transform: scale(1) } }
@@ -173,113 +130,64 @@ export default function Login({ onLogin }) {
         @keyframes fadeSlideR { from { opacity: 0; transform: translateX(32px) } to { opacity: 1; transform: translateX(0) } }
         @keyframes fadeSlideU { from { opacity: 0; transform: translateY(12px) } to { opacity: 1; transform: translateY(0) } }
         @keyframes lineGrow   { from { width: 0 } to { width: 36px } }
-        @keyframes shimmer    { 0% { background-position: -400px 0 } 100% { background-position: 400px 0 } }
-
-        .login-btn:hover:not(:disabled) {
-          transform: translateY(-2px) !important;
-          box-shadow: 0 14px 36px rgba(243,112,33,0.4) !important;
-        }
-        .login-btn:active:not(:disabled) { transform: translateY(0) !important; }
-
-        input::placeholder { color: #94a3b8; }
-        input { caret-color: #F37021; }
-
-        @media (max-width: 768px) {
-          .split-left { display: none !important; }
-          .split-right { width: 100% !important; }
-        }
       `}</style>
 
       {successData && <SuccessPopup nama={successData.nama} />}
 
-      <div style={{
-        minHeight: "100vh",
-        display: "flex",
-        fontFamily: "'DM Sans', sans-serif",
-        background: "#F0F4FA",
-      }}>
+      <div className="min-h-screen flex font-['DM_Sans'] bg-[#F0F4FA]">
 
-        {/* ── LEFT PANEL (same BNI dark blue as dashboard header) ────────── */}
-        <div className="split-left" style={{
-          width: "52%",
-          position: "relative",
-          overflow: "hidden",
-          background: "linear-gradient(135deg, #002960 0%, #003F87 100%)",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: "48px 52px",
-        }}>
-          {/* Subtle decorative circles — same as dashboard header */}
-          <div style={{ position: "absolute", right: -40, top: -40, width: 320, height: 320, borderRadius: "50%", background: "rgba(255,255,255,0.04)", pointerEvents: "none" }} />
-          <div style={{ position: "absolute", right: 80, bottom: -80, width: 260, height: 260, borderRadius: "50%", background: "rgba(255,255,255,0.03)", pointerEvents: "none" }} />
-          <div style={{ position: "absolute", left: -60, bottom: "30%", width: 240, height: 240, borderRadius: "50%", background: "rgba(243,112,33,0.07)", pointerEvents: "none" }} />
+        {/* ── LEFT PANEL ────────── */}
+        <div className="hidden md:flex w-[52%] relative overflow-hidden bg-gradient-to-br from-[#002960] to-[#003F87] flex-col justify-between px-12 py-12">
+          {/* Decorative circles */}
+          <div className="absolute -right-10 -top-10 w-[320px] h-[320px] rounded-full bg-white/5 pointer-events-none" />
+          <div className="absolute right-20 -bottom-20 w-[260px] h-[260px] rounded-full bg-white/5 pointer-events-none" />
+          <div className="absolute -left-14 bottom-[30%] w-[240px] h-[240px] rounded-full bg-[#F37021]/10 pointer-events-none" />
 
           {/* Logo / brand */}
-          <div style={{ position: "relative", zIndex: 2, animation: mounted ? "fadeSlideL .6s .1s both" : "none" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-              <div style={{
-                width: 48, height: 48,
-                background: "rgba(255,255,255,0.12)",
-                border: "1px solid rgba(255,255,255,0.2)",
-                borderRadius: 14,
-                display: "flex", alignItems: "center", justifyContent: "center",
-              }}>
-                <img src="logo.png" style={{ width: 32, height: 32, objectFit: "contain" }} alt="BNI Life" />
+          <div className="relative z-10" style={{ animation: mounted ? "fadeSlideL .6s .1s both" : "none" }}>
+            <div className="flex items-center gap-3.5">
+              <div className="w-12 h-12 bg-white/10 border border-white/20 rounded-xl flex items-center justify-center">
+                <img src="logo.png" className="w-8 h-8 object-contain" alt="BNI Life" />
               </div>
               <div>
-                <div style={{ color: "white", fontWeight: 700, fontSize: 16, letterSpacing: "-0.2px", fontFamily: "'DM Sans', sans-serif" }}>BNI Dashboard</div>
-                <div style={{ color: "rgba(255,255,255,0.5)", fontSize: 11, marginTop: 2, letterSpacing: "0.1em", textTransform: "uppercase" }}>Internal System</div>
+                <div className="text-white font-bold text-base tracking-tight font-['DM_Sans']">BNI Dashboard</div>
+                <div className="text-white/50 text-[11px] mt-0.5 tracking-widest uppercase">Internal System</div>
               </div>
             </div>
           </div>
 
           {/* Hero text */}
-          <div style={{ position: "relative", zIndex: 2, flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", padding: "48px 0" }}>
+          <div className="relative z-10 flex-1 flex flex-col justify-center py-12">
             {/* Badge */}
-            <div style={{
-              display: "inline-flex", alignItems: "center", gap: 6,
-              background: "rgba(243,112,33,0.15)",
-              border: "1px solid rgba(243,112,33,0.3)",
-              borderRadius: 99, padding: "6px 16px",
-              marginBottom: 24,
-              animation: mounted ? "fadeSlideL .6s .25s both" : "none",
-              alignSelf: "flex-start",
-            }}>
-              <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#F37021" }} />
-              <span style={{ fontSize: 11, color: "#ffb380", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase" }}>
-                Dashboard Manajemen
+            <div 
+              className="inline-flex items-center gap-1.5 bg-[#F37021]/15 border border-[#F37021]/30 rounded-full py-1.5 px-4 mb-6 self-start"
+              style={{ animation: mounted ? "fadeSlideL .6s .25s both" : "none" }}
+            >
+              <div className="w-1.5 h-1.5 rounded-full bg-[#F37021]" />
+              <span className="text-[11px] text-[#ffb380] font-semibold tracking-widest uppercase">
+                Dashboard Manajemen Data BNI
               </span>
             </div>
 
-            <h1 style={{
-              color: "white",
-              fontSize: 48,
-              fontFamily: "'Playfair Display', serif",
-              fontWeight: 800,
-              lineHeight: 1.1,
-              letterSpacing: "-1.2px",
-              marginBottom: 18,
-              animation: mounted ? "fadeSlideL .6s .35s both" : "none",
-            }}>
+            <h1 
+              className="text-white text-5xl font-extrabold font-['Playfair_Display'] leading-[1.1] tracking-[-1.2px] mb-4"
+              style={{ animation: mounted ? "fadeSlideL .6s .35s both" : "none" }}
+            >
               Kelola Data<br />dengan Mudah
             </h1>
 
-            <p style={{
-              color: "rgba(255,255,255,0.55)",
-              fontSize: 14, lineHeight: 1.75,
-              maxWidth: 340, marginBottom: 40,
-              animation: mounted ? "fadeSlideL .6s .45s both" : "none",
-              fontWeight: 400,
-            }}>
+            <p 
+              className="text-white/55 text-sm leading-relaxed max-w-[340px] mb-10 font-normal"
+              style={{ animation: mounted ? "fadeSlideL .6s .45s both" : "none" }}
+            >
               Platform terpadu untuk monitoring, analitik, dan pengelolaan data secara real-time.
             </p>
 
-            {/* Stat cards — 3 columns */}
-            <div style={{
-              display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12,
-              animation: mounted ? "fadeSlideL .6s .55s both" : "none",
-            }}>
+            {/* Stat cards */}
+            <div 
+              className="grid grid-cols-3 gap-3"
+              style={{ animation: mounted ? "fadeSlideL .6s .55s both" : "none" }}
+            >
               <StatCard value="98.6%" label="Uptime" />
               <StatCard value="2.4s" label="Resp. Time" />
               <StatCard value="256-bit" label="Enkripsi" />
@@ -287,106 +195,60 @@ export default function Login({ onLogin }) {
           </div>
 
           {/* Footer tag */}
-          <div style={{ position: "relative", zIndex: 2, animation: mounted ? "fadeSlideL .6s .7s both" : "none" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <div style={{ width: 20, height: 1, background: "rgba(255,255,255,0.25)" }} />
-              <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)", letterSpacing: "0.1em", textTransform: "uppercase" }}>
+          <div className="relative z-10" style={{ animation: mounted ? "fadeSlideL .6s .7s both" : "none" }}>
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-[1px] bg-white/25" />
+              <span className="text-[11px] text-white/30 tracking-widest uppercase">
                 © 2026 BNI Dashboard — Internal Use Only
               </span>
             </div>
           </div>
         </div>
 
-        {/* ── RIGHT PANEL (white card, same as dashboard content area) ───── */}
-        <div className="split-right" style={{
-          width: "48%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "48px 40px",
-          background: "#F0F4FA",
-          position: "relative",
-        }}>
+        {/* ── RIGHT PANEL ───── */}
+        <div className="w-full md:w-[48%] flex flex-col justify-center items-center py-12 px-10 bg-[#F0F4FA] relative">
+          <div className="w-full max-w-[420px] relative z-10">
 
-          <div style={{ width: "100%", maxWidth: 420, position: "relative", zIndex: 1 }}>
-
-            {/* Card wrapper — mirrors dashboard ChartCard */}
-            <div style={{
-              background: "white",
-              borderRadius: 18,
-              border: "1px solid rgba(0,63,135,0.07)",
-              boxShadow: "0 2px 20px rgba(0,63,135,0.07)",
-              padding: "40px 40px 36px",
-              animation: mounted ? "fadeSlideR .6s .2s both" : "none",
-            }}>
-
-              {/* Top accent bar — BNI orange */}
-              <div style={{
-                height: 4, borderRadius: "4px 4px 0 0",
-                background: "linear-gradient(90deg, #F37021, #ff9a50)",
-                margin: "-40px -40px 32px",
-                borderRadius: "18px 18px 0 0",
-              }} />
+            {/* Card wrapper */}
+            <div 
+              className="bg-white rounded-[18px] border border-[#003F87]/10 shadow-[0_2px_20px_rgba(0,63,135,0.07)] px-10 pt-10 pb-9"
+              style={{ animation: mounted ? "fadeSlideR .6s .2s both" : "none" }}
+            >
+              {/* Top accent bar */}
+              <div className="h-1 rounded-t-[18px] bg-gradient-to-r from-[#F37021] to-[#ff9a50] -mx-10 -mt-10 mb-8" />
 
               {/* Header */}
-              <div style={{ marginBottom: 28 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                  <div style={{
-                    width: 36, height: 36, borderRadius: 10,
-                    background: "rgba(0,63,135,0.08)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    <IconLandmark size={18} color="#003F87" />
-                  </div>
-                  <div style={{
-                    height: 2, width: 0,
-                    background: "#F37021", borderRadius: 2,
-                    animation: mounted ? "lineGrow .5s .7s forwards" : "none",
-                  }} />
-                  <span style={{ fontSize: 11, color: "#F37021", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em" }}>
-                    Selamat Datang
-                  </span>
-                </div>
-                <h2 style={{
-                  fontSize: 28,
-                  fontFamily: "'Playfair Display', serif",
-                  fontWeight: 800,
-                  color: "#002960",
-                  letterSpacing: "-0.8px",
-                  lineHeight: 1.2,
-                  marginBottom: 8,
-                }}>
+              <div className="mb-7">
+                <h2 className="text-[28px] font-extrabold font-['Playfair_Display'] text-[#002960] tracking-[-0.8px] leading-tight mb-2">
                   Masuk ke Dashboard
                 </h2>
-                <p style={{ fontSize: 13, color: "#64748b", lineHeight: 1.6, fontWeight: 400 }}>
-                  Gunakan kredensial internal Anda untuk mengakses sistem.
+                <p className="text-[13px] text-slate-500 leading-relaxed font-normal">
+                  Gunakan kredensial internal untuk mengakses sistem.
                 </p>
               </div>
 
               {/* Error */}
               {error && (
-                <div style={{
-                  display: "flex", alignItems: "flex-start", gap: 10,
-                  background: "#fef2f2",
-                  border: "1px solid rgba(220,38,38,0.2)",
-                  borderRadius: 10, padding: "10px 14px", marginBottom: 20,
-                  animation: "fadeSlideU .25s ease",
-                }}>
-                  <div style={{ marginTop: 1 }}><IconAlert /></div>
-                  <span style={{ fontSize: 12, color: "#dc2626", fontWeight: 500, lineHeight: 1.5 }}>{error}</span>
+                <div 
+                  className="flex items-start gap-2.5 bg-red-50 border border-red-600/20 rounded-lg py-2.5 px-3.5 mb-5"
+                  style={{ animation: "fadeSlideU .25s ease" }}
+                >
+                  <div className="mt-[1px]"><IconAlert /></div>
+                  <span className="text-xs text-red-600 font-medium leading-relaxed">{error}</span>
                 </div>
               )}
 
               {/* Username */}
-              <div style={{ marginBottom: 14 }}>
-                <label style={{
-                  display: "block", fontSize: 10, fontWeight: 700,
-                  color: "#94a3b8", textTransform: "uppercase",
-                  letterSpacing: "0.12em", marginBottom: 7,
-                }}>Username</label>
-                <div style={inputStyle("username")}>
-                  <span style={{ color: focusedField === "username" ? "#003F87" : "#cbd5e1", transition: "color .2s" }}>
+              <div className="mb-3.5">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.12em] mb-1.5">
+                  Username
+                </label>
+                <div className={`flex items-center gap-3 border-[1.5px] rounded-xl px-4 py-3 transition-all duration-200 ${
+                  focusedField === "username" 
+                    ? "bg-[#EEF4FF] border-[#003F87] ring-[3px] ring-[#003F87]/10" 
+                    : error ? "bg-[#F8FAFC] border-red-600/30" : "bg-[#F8FAFC] border-slate-200"
+                }`}>
+                  <span className={`transition-colors duration-200 ${focusedField === "username" ? "text-[#003F87]" : "text-slate-300"}`}>
                     <IconUser />
                   </span>
                   <input
@@ -398,24 +260,22 @@ export default function Login({ onLogin }) {
                     onKeyDown={handleKeyDown}
                     placeholder="Masukkan username"
                     autoComplete="username"
-                    style={{
-                      border: "none", background: "transparent", outline: "none",
-                      fontSize: 13, color: "#1e293b", width: "100%",
-                      fontFamily: "'DM Sans', sans-serif", fontWeight: 400,
-                    }}
+                    className="border-none bg-transparent outline-none text-[13px] text-slate-800 w-full font-normal placeholder-slate-400 caret-[#F37021] font-['DM_Sans']"
                   />
                 </div>
               </div>
 
               {/* Password */}
-              <div style={{ marginBottom: 28 }}>
-                <label style={{
-                  display: "block", fontSize: 10, fontWeight: 700,
-                  color: "#94a3b8", textTransform: "uppercase",
-                  letterSpacing: "0.12em", marginBottom: 7,
-                }}>Password</label>
-                <div style={inputStyle("password")}>
-                  <span style={{ color: focusedField === "password" ? "#003F87" : "#cbd5e1", transition: "color .2s" }}>
+              <div className="mb-7">
+                <label className="block text-[10px] font-bold text-slate-400 uppercase tracking-[0.12em] mb-1.5">
+                  Password
+                </label>
+                <div className={`flex items-center gap-3 border-[1.5px] rounded-xl px-4 py-3 transition-all duration-200 ${
+                  focusedField === "password" 
+                    ? "bg-[#EEF4FF] border-[#003F87] ring-[3px] ring-[#003F87]/10" 
+                    : error ? "bg-[#F8FAFC] border-red-600/30" : "bg-[#F8FAFC] border-slate-200"
+                }`}>
+                  <span className={`transition-colors duration-200 ${focusedField === "password" ? "text-[#003F87]" : "text-slate-300"}`}>
                     <IconLock />
                   </span>
                   <input
@@ -427,21 +287,11 @@ export default function Login({ onLogin }) {
                     onKeyDown={handleKeyDown}
                     placeholder="Masukkan password"
                     autoComplete="current-password"
-                    style={{
-                      border: "none", background: "transparent", outline: "none",
-                      fontSize: 13, color: "#1e293b", width: "100%",
-                      fontFamily: "'DM Sans', sans-serif", fontWeight: 400,
-                    }}
+                    className="border-none bg-transparent outline-none text-[13px] text-slate-800 w-full font-normal placeholder-slate-400 caret-[#F37021] font-['DM_Sans']"
                   />
                   <button
                     onClick={() => setShowPass(v => !v)}
-                    style={{
-                      background: "none", border: "none", cursor: "pointer",
-                      padding: 4, display: "flex", alignItems: "center",
-                      color: "#cbd5e1", transition: "color .2s",
-                    }}
-                    onMouseEnter={e => e.currentTarget.style.color = "#64748b"}
-                    onMouseLeave={e => e.currentTarget.style.color = "#cbd5e1"}
+                    className="p-1 flex items-center text-slate-300 hover:text-slate-500 transition-colors duration-200 focus:outline-none"
                   >
                     {showPass ? <IconEyeOff /> : <IconEye />}
                   </button>
@@ -450,30 +300,17 @@ export default function Login({ onLogin }) {
 
               {/* Submit */}
               <button
-                className="login-btn"
                 onClick={handleSubmit}
                 disabled={loading}
-                style={{
-                  width: "100%",
-                  padding: "14px 24px",
-                  background: loading
-                    ? "#f1f5f9"
-                    : "linear-gradient(135deg, #F37021 0%, #e05800 100%)",
-                  color: loading ? "#94a3b8" : "white",
-                  border: loading ? "1px solid #e2e8f0" : "none",
-                  borderRadius: 12,
-                  fontSize: 14, fontWeight: 700,
-                  cursor: loading ? "not-allowed" : "pointer",
-                  display: "flex", alignItems: "center", justifyContent: "center", gap: 10,
-                  boxShadow: loading ? "none" : "0 6px 22px rgba(243,112,33,0.3)",
-                  transition: "all .25s ease",
-                  letterSpacing: "0.01em",
-                  fontFamily: "'DM Sans', sans-serif",
-                }}
+                className={`w-full py-3.5 px-6 rounded-xl text-sm font-bold flex items-center justify-center gap-2.5 transition-all duration-250 tracking-[0.01em] font-['DM_Sans'] ${
+                  loading 
+                    ? "bg-slate-100 text-slate-400 border border-slate-200 cursor-not-allowed" 
+                    : "bg-gradient-to-br from-[#F37021] to-[#e05800] text-white shadow-[0_6px_22px_rgba(243,112,33,0.3)] hover:-translate-y-0.5 hover:shadow-[0_14px_36px_rgba(243,112,33,0.4)] active:translate-y-0"
+                }`}
               >
                 {loading ? (
                   <>
-                    <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round">
+                    <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                       <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83">
                         <animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="0.8s" repeatCount="indefinite"/>
                       </path>
@@ -489,14 +326,13 @@ export default function Login({ onLogin }) {
               </button>
             </div>
 
-            {/* Security note below card */}
-            <div style={{
-              display: "flex", alignItems: "center", justifyContent: "center", gap: 7,
-              marginTop: 18,
-              animation: mounted ? "fadeSlideR .6s .6s both" : "none",
-            }}>
-              <span style={{ color: "#94a3b8" }}><IconShield /></span>
-              <span style={{ fontSize: 11, color: "#94a3b8", letterSpacing: "0.04em" }}>
+            {/* Security note */}
+            <div 
+              className="flex items-center justify-center gap-2 mt-4"
+              style={{ animation: mounted ? "fadeSlideR .6s .6s both" : "none" }}
+            >
+              <span className="text-slate-400"><IconShield /></span>
+              <span className="text-[11px] text-slate-400 tracking-[0.04em]">
                 Koneksi terenkripsi 256-bit · Hanya pengguna internal
               </span>
             </div>
